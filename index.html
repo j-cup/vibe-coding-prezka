@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vibe coding — prezentácia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: "Ellograph CF";
+      src: url("./Ellograph%20CF%20Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Ellograph CF";
+      src: url("./Ellograph%20CF%20Bold.ttf") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --brand: #bd0b31;
+      --bg-light: #f5f5f5;
+      --bg-blush: #efe2e4;
+      --bg-dark: #222222;
+      --bg-chapter: #424648;
+      --text: #333333;
+      --text-inverse: #ffffff;
+      --font-display: "Ellograph CF", "Kumbh Sans", system-ui, sans-serif;
+      --font-body: "Kumbh Sans", "Open Sans", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #111;
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 5vh 5.5vw 7vh;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .slide.is-active {
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 420ms ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide.is-active.from-left {
+      animation-name: slideInLeft;
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide.is-active .anim {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: rise 480ms ease forwards;
+    }
+
+    .slide.is-active .anim:nth-child(1) { animation-delay: 60ms; }
+    .slide.is-active .anim:nth-child(2) { animation-delay: 120ms; }
+    .slide.is-active .anim:nth-child(3) { animation-delay: 180ms; }
+    .slide.is-active .anim:nth-child(4) { animation-delay: 240ms; }
+    .slide.is-active .anim:nth-child(5) { animation-delay: 300ms; }
+    .slide.is-active .anim:nth-child(6) { animation-delay: 360ms; }
+    .slide.is-active .anim:nth-child(7) { animation-delay: 420ms; }
+    .slide.is-active .anim:nth-child(8) { animation-delay: 480ms; }
+
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.12;
+    }
+
+    p, li, label, .body { line-height: 1.35; }
+
+    /* Typografia v vh — landscape, škáluje s výškou obrazovky */
+    .title-xl {
+      font-size: 9.5vh;
+    }
+
+    .title-l {
+      font-size: 6.2vh;
+    }
+
+    .title-m {
+      font-size: 4.6vh;
+    }
+
+    .subtitle {
+      font-size: 3.4vh;
+      font-weight: 500;
+      opacity: 0.92;
+      line-height: 1.3;
+    }
+
+    .body {
+      font-size: 3vh;
+    }
+
+    .small {
+      font-size: 2.1vh;
+    }
+
+    /* —— pozadia / dekor —— */
+    .bg-dark { background: var(--bg-light); color: var(--text); }
+    .bg-chapter { background: var(--bg-light); color: var(--text); }
+    .bg-light { background: var(--bg-light); color: var(--text); }
+    .bg-blush { background: var(--bg-blush); color: var(--text); }
+    .bg-red { background: var(--brand); color: var(--text-inverse); }
+
+    .subtitle-sm {
+      font-size: 2.4vh;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--text);
+      opacity: 0.88;
+      max-width: 58vw;
+    }
+
+    .logo-skillin {
+      display: block;
+      height: auto;
+      max-height: 15vh;
+      margin: 0 auto 3.5vh;
+      object-fit: contain;
+    }
+
+    .partners {
+      position: absolute;
+      left: 5vw;
+      bottom: 5vh;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+    }
+
+    .partners .logo-partnery {
+      height: auto;
+      width: min(32vw, 42vh);
+      max-height: 9vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .title-slide-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .corner-tl, .corner-br {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .corner-tl {
+      width: min(42vw, 520px);
+      height: min(42vw, 520px);
+      top: -18%;
+      left: -12%;
+    }
+
+    .corner-br {
+      width: min(48vw, 620px);
+      height: min(48vw, 620px);
+      bottom: -28%;
+      right: -14%;
+    }
+
+    .corner-red { background: var(--brand); }
+    .corner-white { background: rgba(255,255,255,0.12); }
+    .corner-blush { background: var(--bg-blush); opacity: 0.9; }
+    .corner-soft-red { background: rgba(189, 11, 49, 0.18); }
+
+    .slide > .content {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      width: 100%;
+      max-width: 92%;
+      margin: 0 auto;
+    }
+
+    .center {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .grow { flex: 1; }
+
+    /* kapitola — kruh na stred celej obrazovky */
+    .slide.bg-chapter {
+      padding: 0;
+    }
+
+    .slide.bg-chapter > .content.chapter-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      flex: none;
+      display: grid;
+      place-items: center;
+    }
+
+    .chapter-wrap {
+      flex: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    .chapter-circle {
+      width: min(52vh, 52vw);
+      height: min(52vh, 52vw);
+      border-radius: 50%;
+      background: var(--brand);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8%;
+      box-shadow: none;
+      animation: pop 520ms ease both;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .chapter-circle h1 {
+      color: #fff;
+      font-size: 5.2vh;
+    }
+
+    /* topic bubble */
+    .bubble-stage {
+      flex: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    .bubble {
+      width: min(72vh, 68vw);
+      height: min(72vh, 68vw);
+      max-width: 900px;
+      max-height: 900px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--brand);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8% 10%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bubble .body {
+      font-size: 2.6vh;
+      line-height: 1.35;
+    }
+
+    .bubble .small {
+      font-size: 1.9vh;
+    }
+
+    .bubble-soft {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      width: min(55vh, 55vw);
+      height: min(55vh, 55vw);
+      right: 8%;
+      bottom: 6%;
+      z-index: 0;
+    }
+
+    /* rám */
+    .frame {
+      flex: 1;
+      border: 0.25vh solid var(--brand);
+      border-radius: 4.5vh;
+      padding: 5vh 4vw 4vh;
+      position: relative;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.2vh;
+      margin-top: 2.5vh;
+    }
+
+    .bg-red .frame {
+      background: var(--bg-blush);
+      border-color: transparent;
+      color: var(--text);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-self: flex-start;
+      border: 0.25vh solid var(--brand);
+      color: var(--brand);
+      background: var(--bg-blush);
+      border-radius: 999px;
+      padding: 0.6vh 1.6vh;
+      font-size: 1.8vh;
+      font-weight: 700;
+      position: absolute;
+      top: -1.4vh;
+      left: 3vh;
+    }
+
+    .bg-red .pill {
+      background: #fff;
+    }
+
+    /* TOC */
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.8vh 3.5vw;
+      margin-top: 3vh;
+      flex: 1;
+      align-content: center;
+    }
+
+    .toc-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.4vh;
+      align-items: center;
+    }
+
+    .num {
+      width: 5.2vh;
+      height: 5.2vh;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 2.4vh;
+      flex-shrink: 0;
+    }
+
+    .toc-item h3 {
+      color: var(--brand);
+      font-size: 2.8vh;
+      margin-bottom: 0;
+      line-height: 1.2;
+    }
+
+    .toc-grid.toc-stack {
+      grid-template-columns: 1fr;
+      max-width: 72vw;
+      gap: 3.2vh;
+      align-content: center;
+    }
+
+    /* process 3 — šablóna 007 */
+    .process {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+      margin-top: 6vh;
+      width: 100%;
+      max-width: 94%;
+      align-self: center;
+      padding-top: 4vh;
+    }
+
+    .process::before {
+      content: "";
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      top: calc(4vh + min(14vh, 10vw));
+      height: 0.45vh;
+      background: var(--brand);
+      opacity: 1;
+      z-index: 0;
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 1;
+      max-width: 28vw;
+      padding: 0 1vw;
+    }
+
+    .step-circle {
+      width: min(28vh, 20vw);
+      height: min(28vh, 20vw);
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      padding: 2vh;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 2.8vh;
+      margin-bottom: 2.4vh;
+      text-align: center;
+    }
+
+    .step-circle .step-label {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .step-circle .step-paren {
+      font-size: 0.85em;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .step p {
+      color: var(--brand);
+      font-weight: 500;
+      font-size: 2.4vh;
+      max-width: 24vh;
+      line-height: 1.3;
+    }
+
+    /* split lists */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      flex: 1;
+      align-items: stretch;
+      margin-top: 1rem;
+    }
+
+    .box {
+      border: 0.3vh solid rgba(255,255,255,0.55);
+      border-radius: 2.8vh;
+      padding: 3vh 2.5vw;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .box-round {
+      border: 0.35vh solid #fff;
+      border-radius: 4vh;
+      padding: 3.5vh 2.8vw;
+      background: transparent;
+      position: relative;
+    }
+
+    .box-round h3 {
+      display: inline-block;
+      border: 0.3vh solid #fff;
+      border-radius: 999px;
+      padding: 0.7vh 2vh;
+      margin-bottom: 2.4vh;
+      font-size: 3vh;
+      align-self: flex-start;
+    }
+
+    .box h3 {
+      margin-bottom: 2vh;
+      font-size: 3.4vh;
+    }
+
+    .avoid-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.4vw;
+      align-items: stretch;
+      margin-top: 2vh;
+      min-height: 0;
+    }
+
+    .avoid-card {
+      border: 0.3vh solid rgba(255,255,255,0.55);
+      border-radius: 2.4vh;
+      padding: 3vh 1.4vw;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.6vh;
+      text-align: center;
+      min-height: 0;
+    }
+
+    .avoid-card .num {
+      width: 5vh;
+      height: 5vh;
+      border-radius: 50%;
+      border: 0.25vh solid rgba(255,255,255,0.7);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 2.4vh;
+      flex-shrink: 0;
+    }
+
+    .avoid-card p {
+      font-size: 2.6vh;
+      line-height: 1.3;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .bg-blush .avoid-card,
+    .bg-light .avoid-card {
+      border-color: var(--brand);
+      background: rgba(189, 11, 49, 0.06);
+      color: var(--text);
+    }
+
+    .bg-blush .avoid-card .num,
+    .bg-light .avoid-card .num {
+      border: none;
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .bg-blush .avoid-card p,
+    .bg-light .avoid-card p {
+      color: var(--brand);
+    }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2.4vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2vw;
+      align-items: center;
+      font-size: 3.2vh;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .checklist .num {
+      width: 5vh;
+      height: 5vh;
+      font-size: 2.4vh;
+    }
+
+    ul.clean {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6vh;
+    }
+
+    ul.clean li {
+      position: relative;
+      padding-left: 2.2vh;
+      font-size: 2.8vh;
+    }
+
+    ul.clean li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 0.9vh;
+      height: 0.9vh;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    .kv {
+      display: flex;
+      flex-direction: column;
+      gap: 2.8vh;
+      margin-top: 1vh;
+    }
+
+    .kv-row {
+      display: grid;
+      grid-template-columns: 22vh 1fr;
+      gap: 2vh;
+      align-items: baseline;
+      font-size: 3vh;
+    }
+
+    .kv-row strong {
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 3vh;
+    }
+
+    /* spektrum */
+    .spectrum {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .spectrum-track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      padding-top: 1.5rem;
+    }
+
+    .spectrum-track::before {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 0.35rem;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand), #7a0a22);
+      border-radius: 2px;
+    }
+
+    .spectrum-point {
+      background: #fff;
+      border-radius: 2vh;
+      padding: 2.2vh 1.2vw;
+      text-align: center;
+      border: 0.3vh solid var(--brand);
+      min-height: 28vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.2vh;
+    }
+
+    .spectrum-point.highlight {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .spectrum-point h3 {
+      font-size: 2.5vh;
+      color: var(--brand);
+      line-height: 1.2;
+    }
+
+    .spectrum-point.highlight h3 { color: #fff; }
+
+    .spectrum-point p {
+      font-size: 2vh;
+      opacity: 0.9;
+      line-height: 1.3;
+    }
+
+    .axis-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 2.2vh;
+      font-weight: 600;
+      color: var(--brand);
+      padding: 0 0.5rem;
+    }
+
+    /* štatistika */
+    .stat-split {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      flex: 1;
+      margin: 0;
+      min-height: 100%;
+      width: 100%;
+      background: var(--brand);
+    }
+
+    .stat-left {
+      background: var(--brand);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8vh 5vw;
+    }
+
+    .stat-huge {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 22vh;
+      line-height: 0.95;
+    }
+
+    .stat-right {
+      background: var(--bg-blush);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8vh 5vw 8vh 7vw;
+      border-top-left-radius: 45% 100%;
+      border-bottom-left-radius: 45% 100%;
+      margin-left: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    /* quote */
+    .quote-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 68%;
+      padding: 4vh 0 8vh;
+    }
+
+    .quote-block blockquote {
+      font-family: var(--font-display);
+      font-size: 5vh;
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--text);
+    }
+
+    .quote-attr {
+      font-size: 2.4vh;
+      opacity: 0.85;
+      margin-top: 2vh;
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    /* content + vizuál */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3vw;
+      flex: 1;
+      align-items: center;
+    }
+
+    .visual-circle {
+      width: min(42vh, 36vw);
+      height: min(42vh, 36vw);
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 3vh;
+      margin: 0 auto;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 3.6vh;
+      line-height: 1.2;
+    }
+
+    .gbu-split {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 2vw;
+      align-items: center;
+      min-height: 0;
+      margin-top: 0;
+      padding-left: 4vw;
+    }
+
+    .gbu-split .title-l {
+      font-size: 7.6vh;
+    }
+
+    .gbu-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3vh;
+      margin: 3vh 0 0;
+      padding: 0;
+    }
+
+    .gbu-points li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.6vw;
+      align-items: center;
+      font-size: 3.6vh;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .gbu-points .check {
+      width: 5.2vh;
+      height: 5.2vh;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 2.8vh;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gbu-points .check::before {
+      content: "✓";
+      font-family: var(--font-body);
+    }
+
+    .gbu-points .cross {
+      width: 5.2vh;
+      height: 5.2vh;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--brand);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 2.6vh;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gbu-points .cross::before {
+      content: "✕";
+      font-family: var(--font-body);
+    }
+
+    .bg-red .gbu-points li {
+      color: #fff;
+    }
+
+    .bg-red.gbu-slide .legend {
+      margin-top: 3vh;
+      max-width: 56vw;
+      border-top-color: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+
+    .bg-charcoal {
+      background: var(--bg-dark);
+      color: #fff;
+    }
+
+    .bg-charcoal .gbu-points li {
+      color: #fff;
+    }
+
+    .bg-charcoal .gbu-points .warn {
+      background: #fff;
+      color: var(--bg-dark);
+    }
+
+    .gbu-points .warn {
+      width: 5.2vh;
+      height: 5.2vh;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 3vh;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gbu-points .warn::before {
+      content: "!";
+      font-family: var(--font-display);
+    }
+
+    .slide.gbu-slide {
+      padding-bottom: 0;
+      padding-right: 0;
+      overflow: hidden;
+    }
+
+    .slide.gbu-slide > .content {
+      max-width: none;
+      padding-right: 0;
+    }
+
+    .gbu-visual {
+      position: absolute;
+      right: 5vw;
+      bottom: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      width: 32vw;
+      max-width: 40vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .gbu-visual img {
+      width: 100%;
+      height: auto;
+      max-height: 88vh;
+      object-fit: contain;
+      object-position: right bottom;
+      display: block;
+    }
+
+    .text-red { color: var(--brand); }
+    .text-white { color: #fff; }
+    .muted { opacity: 0.85; }
+
+    .legend {
+      margin-top: auto;
+      padding-top: 2vh;
+      border-top: 1px solid rgba(0,0,0,0.12);
+      font-size: 1.85vh;
+      line-height: 1.35;
+      color: inherit;
+      opacity: 0.92;
+      max-width: 95%;
+    }
+
+    .bg-dark .legend,
+    .bg-chapter .legend,
+    .bg-red .legend {
+      border-top-color: rgba(255,255,255,0.25);
+    }
+
+    .legend p + p { margin-top: 0.35rem; }
+    .legend strong { font-weight: 700; }
+
+    .note-asterisk {
+      font-size: 0.7em;
+      vertical-align: super;
+      line-height: 0;
+    }
+
+    /* —— prezentujúci (šablóna 005) —— */
+    .speaker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4vw;
+      flex: 1;
+      align-self: stretch;
+      width: 100%;
+      max-width: 94%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .photo-stack {
+      position: relative;
+      width: min(48vh, 38vw);
+      height: min(58vh, 46vw);
+      margin: 0 auto;
+      perspective: 1200px;
+    }
+
+    .photo-card {
+      position: absolute;
+      inset: 0;
+      border-radius: 2.4vh;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1.2vh 3vh rgba(0,0,0,0.22);
+      border: 0.7vh solid #fff;
+      transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms ease, z-index 0s;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .photo-card.is-back {
+      transform: translate(3.2vh, 2.4vh) rotate(5deg) scale(0.96);
+      opacity: 0.55;
+      z-index: 1;
+      filter: saturate(0.85);
+    }
+
+    .photo-card.is-front {
+      transform: translate(0, 0) rotate(-2deg) scale(1);
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .photo-stack.show-smile .card-serious { /* swap handled by classes on cards */ }
+
+    .speaker-info {
+      color: #fff;
+      padding-left: 1vw;
+    }
+
+    .speaker-info h1 {
+      font-size: 8vh;
+      line-height: 1.05;
+      margin-bottom: 2.5vh;
+    }
+
+    .speaker-info .role {
+      font-size: 3.2vh;
+      font-weight: 500;
+      line-height: 1.35;
+      opacity: 0.95;
+    }
+
+    .speaker-info .company {
+      font-size: 3.2vh;
+      font-weight: 600;
+      margin-top: 0.8vh;
+      opacity: 0.95;
+    }
+
+    .speaker-logo {
+      position: absolute;
+      top: 3.5vh;
+      right: 4.5vw;
+      z-index: 3;
+      height: auto;
+      width: min(22vw, 28vh);
+      max-height: 7vh;
+      object-fit: contain;
+    }
+
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      padding: 1.4vh 3.2vh;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 2.2vh;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease;
+      flex-shrink: 0;
+    }
+
+    .demo-btn:hover {
+      transform: scale(1.04);
+      opacity: 0.95;
+    }
+
+    .prompt-box {
+      flex: 1;
+      min-height: 0;
+      background: #fff;
+      border: 0.25vh solid var(--brand);
+      border-radius: 2.4vh;
+      padding: 1.2vh 1.4vw;
+      overflow: auto;
+      margin-top: 1.5vh;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .prompt-box::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .prompt-box pre {
+      margin: 0;
+      font-family: "JetBrains Mono", "Consolas", ui-monospace, monospace;
+      font-size: 1.55vh;
+      line-height: 1.35;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .prompt-box .prompt-bold {
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .prompt-box .prompt-half {
+      font-size: 0.5em;
+      line-height: 1.15;
+      font-weight: 400;
+    }
+
+    .prompt-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2vw;
+      flex-shrink: 0;
+    }
+
+    .prompt-header .title-l {
+      margin: 0;
+    }
+
+    .demo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.1vh 2.4vh;
+      border-radius: 999px;
+      border: 0.3vh solid var(--brand);
+      background: var(--bg-blush);
+      color: var(--brand);
+      font-family: var(--font-body);
+      font-size: 2vh;
+      font-weight: 700;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .canva-stack {
+      position: relative;
+      width: min(48vh, 42vw);
+      height: min(48vh, 42vw);
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    .canva-stack .shot {
+      position: absolute;
+      border-radius: 50%;
+      border: 0.45vh solid #111;
+      overflow: hidden;
+      background: #222;
+      box-shadow: 0 1vh 2.5vh rgba(0,0,0,0.18);
+    }
+
+    .canva-stack .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .canva-stack .shot-1 {
+      width: 58%;
+      height: 58%;
+      top: 4%;
+      left: 2%;
+      z-index: 3;
+    }
+
+    .canva-stack .shot-2 {
+      width: 52%;
+      height: 52%;
+      top: 8%;
+      right: 0;
+      z-index: 2;
+    }
+
+    .canva-stack .shot-3 {
+      width: 48%;
+      height: 48%;
+      bottom: 2%;
+      left: 18%;
+      z-index: 4;
+    }
+
+    .canva-stack .shot-4 {
+      width: 40%;
+      height: 40%;
+      bottom: 8%;
+      right: 6%;
+      z-index: 1;
+    }
+
+    .canva-quote {
+      margin: 3.5vh 0 0;
+      padding: 2.2vh 2vw;
+      border: 0.2vh solid rgba(189, 11, 49, 0.22);
+      background: #fff;
+      border-radius: 2.4vh;
+      display: inline-block;
+      max-width: 100%;
+      box-shadow: 0 0.6vh 1.8vh rgba(34, 34, 34, 0.1);
+    }
+
+    .canva-quote p {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 3.4vh;
+      line-height: 1.2;
+      color: var(--brand);
+      margin: 0;
+    }
+
+    .canva-quote cite {
+      display: block;
+      margin-top: 1.2vh;
+      font-family: var(--font-body);
+      font-style: normal;
+      font-size: 2vh;
+      font-weight: 600;
+      color: var(--text);
+      opacity: 0.75;
+    }
+
+    .canva-quote cite::before {
+      content: "— ";
+    }
+
+    .p001-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 2.5vw;
+      flex: 1;
+      min-height: 0;
+      align-items: stretch;
+      margin-top: 1.5vh;
+    }
+
+    .p001-layout .prompt-box {
+      margin-top: 0;
+      max-height: none;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .p001-layout .prompt-box pre {
+      font-size: 2.15vh;
+      line-height: 1.4;
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    .stack-panel {
+      background: #fff;
+      border: 0.25vh solid var(--brand);
+      border-radius: 2.4vh;
+      padding: 2.5vh 2vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.8vh;
+      align-self: stretch;
+    }
+
+    .stack-panel h3 {
+      font-family: var(--font-display);
+      font-size: 3vh;
+      color: var(--brand);
+      margin: 0 0 0.5vh;
+    }
+
+    .stack-panel ul.clean li {
+      font-size: 2.35vh;
+      line-height: 1.35;
+    }
+
+    .stack-panel .tech {
+      display: block;
+      margin-top: 0.35vh;
+      font-size: 0.82em;
+      font-weight: 600;
+      color: var(--brand);
+      opacity: 0.85;
+    }
+
+    .stack-flow {
+      margin-top: 0.8vh;
+      padding-top: 1.6vh;
+      border-top: 0.2vh solid var(--bg-blush);
+      font-size: 2.1vh;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .stack-flow strong {
+      color: var(--brand);
+    }
+
+    .result-gallery {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.7fr 1.15fr;
+      gap: 2vw;
+      align-items: end;
+      min-height: 0;
+      margin-top: 1.5vh;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2vh;
+      min-height: 0;
+    }
+
+    .result-card figcaption {
+      font-size: 1.9vh;
+      font-weight: 700;
+      color: var(--brand);
+      text-align: center;
+    }
+
+    .result-frame {
+      background: #1a1a1a;
+      border-radius: 1.4vh;
+      padding: 1.1vh;
+      box-shadow: 0 1.2vh 3vh rgba(0,0,0,0.18);
+      width: 100%;
+      max-height: 58vh;
+      display: flex;
+    }
+
+    .result-frame img {
+      width: 100%;
+      height: auto;
+      max-height: 56vh;
+      object-fit: contain;
+      object-position: top center;
+      border-radius: 0.6vh;
+      background: #fff;
+      display: block;
+    }
+
+    .result-frame.phone {
+      width: auto;
+      max-width: 100%;
+      border-radius: 3vh;
+      padding: 1.4vh 1vh 2vh;
+      margin: 0 auto;
+    }
+
+    .result-frame.phone img {
+      border-radius: 2vh;
+      max-height: 54vh;
+      width: auto;
+      max-width: 100%;
+    }
+
+    .qr-slide {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3vh;
+      text-align: center;
+    }
+
+    .qr-slide img {
+      width: min(52vh, 42vw);
+      height: auto;
+      display: block;
+      border-radius: 2vh;
+      background: #fff;
+      box-shadow: 0 1.2vh 3vh rgba(0,0,0,0.12);
+    }
+
+    .qr-slide p {
+      font-size: 2.8vh;
+      font-weight: 600;
+      color: var(--text);
+      max-width: 36rem;
+      line-height: 1.3;
+    }
+
+    /* navigácia */
+    .nav {
+      position: fixed;
+      right: 1.8vh;
+      bottom: 1.6vh;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 1vh;
+      background: rgba(34, 34, 34, 0.82);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      border-radius: 999px;
+      padding: 0.7vh 0.9vh 0.7vh 1.6vh;
+      box-shadow: 0 1vh 2.5vh rgba(0,0,0,0.25);
+      user-select: none;
+    }
+
+    .nav .progress {
+      font-size: 1.9vh;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      min-width: 7vh;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .nav button {
+      width: 4.2vh;
+      height: 4.2vh;
+      border: none;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      cursor: pointer;
+      font-size: 2.2vh;
+      display: grid;
+      place-items: center;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    .nav button:hover { transform: scale(1.06); }
+    .nav button:disabled {
+      opacity: 0.35;
+      cursor: default;
+      transform: none;
+    }
+
+    .progress-bar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 3px;
+      background: var(--brand);
+      z-index: 60;
+      width: 0%;
+      transition: width 280ms ease;
+    }
+
+    @media (max-width: 900px) {
+      .toc-grid, .split, .two-col, .spectrum-track, .speaker, .avoid-grid, .gbu-split { grid-template-columns: 1fr; }
+      .spectrum-track { gap: 0.6rem; }
+      .kv-row { grid-template-columns: 1fr; gap: 0.2rem; }
+      .stat-split { grid-template-columns: 1fr; }
+      .stat-right {
+        border-radius: 0;
+        margin-left: 0;
+      }
+      .quote-block { max-width: 100%; }
+      .process { flex-direction: column; gap: 1.2rem; }
+      .process::before { display: none; }
+      .photo-stack {
+        width: min(40vh, 70vw);
+        height: min(48vh, 80vw);
+        margin-bottom: 2vh;
+      }
+      .speaker-info { text-align: center; padding-left: 0; }
+      .speaker-info h1 { font-size: 6.5vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="deck" id="deck">
+
+    <!-- S00 -->
+    <section class="slide bg-light is-active" data-slide>
+      <div class="corner-tl corner-blush" style="width:min(50vw,620px);height:min(50vw,620px);top:-22%;left:-16%;"></div>
+      <div class="corner-tl corner-red"></div>
+      <div class="corner-br corner-blush" style="width:min(56vw,700px);height:min(56vw,700px);bottom:-32%;right:-18%;"></div>
+      <div class="corner-br corner-red"></div>
+      <div class="title-slide-center">
+        <img class="logo-skillin anim" src="./obrazky/skill-in-logo.png" alt="skill-in 4.0" />
+        <h1 class="title-xl anim" style="color:var(--text);">Vibe coding</h1>
+        <p class="subtitle-sm anim" style="margin-top:2.2vh;">
+          Ako si vytvoriť užitočnú aplikáciu — aj keď nie si programátorka
+        </p>
+      </div>
+      <footer class="partners">
+        <img class="logo-partnery" src="./obrazky/partnery-logo.png" alt="Deutsche Telekom Services Europe Slovakia · ženský algoritmus" />
+      </footer>
+    </section>
+
+    <!-- S00a — prezencia QR -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <div class="qr-slide">
+          <h2 class="title-l text-red anim">Prezencia</h2>
+          <img class="anim" src="./obrazky/prezencka-qrcode.png" alt="QR kód na prezenciu" />
+          <p class="anim">Naskenuj QR kód a zapíš sa na prezenciu</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S00b — prezentujúci -->
+    <section class="slide bg-red" data-slide data-speaker>
+      <img class="speaker-logo" src="./obrazky/skill-in-2.png" alt="skill-in" />
+      <div class="speaker">
+        <div class="photo-stack" id="photoStack" aria-hidden="true">
+          <div class="photo-card card-serious is-front">
+            <img src="./obrazky/prezentujuci-vazny.jpg" alt="" />
+          </div>
+          <div class="photo-card card-smile is-back">
+            <img src="./obrazky/prezentujuci-usmiaty.jpg" alt="" />
+          </div>
+        </div>
+        <div class="speaker-info">
+          <h1 class="anim">Jakub<br />Korch</h1>
+          <p class="role anim">Senior Technical Consultant</p>
+          <p class="company anim">Bloomreach</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S01 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Prečo sme tu</h2>
+        <div class="process">
+          <div class="step anim">
+            <div class="step-circle">Téma</div>
+            <p>Vibe coding v praxi</p>
+          </div>
+          <div class="step anim">
+            <div class="step-circle"><span class="step-label">Odnesiete<br /><span class="step-paren">(si)</span></span></div>
+            <p>Definíciu, nástroje, 2 príklady a ako na to</p>
+          </div>
+          <div class="step anim">
+            <div class="step-circle"><span class="step-label">Nesnažíme<br /><span class="step-paren">(sa&nbsp;o)</span></span></div>
+            <p>Detailný kurz programovania</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S02 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Obsah hodiny</h2>
+        <div class="toc-grid">
+          <div class="toc-item anim"><span class="num">1</span><div><h3>Čo je „vibe coding“</h3></div></div>
+          <div class="toc-item anim"><span class="num">2</span><div><h3>Nástroje — od chatu po editor</h3></div></div>
+          <div class="toc-item anim"><span class="num">3</span><div><h3>Malá appka: ChatGPT vs Cursor</h3></div></div>
+          <div class="toc-item anim"><span class="num">4</span><div><h3>Vibe kódiť sa dá všeličo</h3></div></div>
+          <div class="toc-item anim"><span class="num">5</span><div><h3>Väčšia appka: Nákupka</h3></div></div>
+          <div class="toc-item anim"><span class="num">6</span><div><h3>Ako „vibe kódiť“ správne</h3></div></div>
+          <div class="toc-item anim"><span class="num">7</span><div><h3>Dobré, zlé a škaredé</h3></div></div>
+          <div class="toc-item anim"><span class="num">8</span><div><h3>Záver</h3></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Čo je vibe coding?</h1></div>
+      </div>
+    </section>
+
+    <!-- S11 -->
+    <section class="slide bg-red" data-slide>
+      <div class="bubble-soft"></div>
+      <div class="content bubble-stage">
+        <div class="bubble anim">
+          <h2 class="title-m" style="margin-bottom:1rem;">Definícia</h2>
+          <p class="body">
+            <strong>Vibe coding</strong> = spôsob vývoja softvéru, pri ktorom popisuješ zámer a správanie produktu bežným jazykom
+            a umelá inteligencia<span class="note-asterisk">*</span> (UI) píše a upravuje kód.
+            Ťažisko práce sa posúva z písania syntaxe na <strong>zadávanie, overovanie a rozhodovanie</strong>.
+          </p>
+          <p class="small" style="margin-top:1rem;">
+            Pojem spopularizoval Andrej Karpathy (2025) — kóduješ skôr rozhovorom než riadok po riadku.
+          </p>
+        </div>
+      </div>
+      <div class="legend" style="position:relative;z-index:2;margin:0 5.5vw 0;padding-bottom:0.5rem;border:none;color:#fff;">
+        <p><strong>*</strong> Umelá inteligencia — softvér, ktorý sa učí z veľkého množstva textu a vie odpovedať alebo tvoriť obsah (vrátane kódu).</p>
+      </div>
+    </section>
+
+    <!-- S12 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim text-white">Čo to nie je — a čo áno</h2>
+        <div class="split">
+          <div class="box box-round anim">
+            <h3>Nie je</h3>
+            <ul class="clean">
+              <li>magické tlačidlo „urob appku bez premýšľania“</li>
+              <li>náhrada za pochopenie, čo chceš dosiahnuť</li>
+              <li>záruka bezpečnosti a kvality bez kontroly</li>
+            </ul>
+          </div>
+          <div class="box box-round anim">
+            <h3>Je</h3>
+            <ul class="clean">
+              <li>zrýchlenie od nápadu k fungujúcej veci</li>
+              <li>prístupné aj bez programátorskych skúseností (s dobrými pokynmi a overením)</li>
+              <li>práca cez zadanie a overovanie namiesto písania každého riadku kódu</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S13 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Ako to typicky vyzerá</h2>
+        <div class="process">
+          <div class="step anim">
+            <div class="step-circle">1. Zámer</div>
+            <p>Popíš čo, pre koho a čo musí fungovať</p>
+          </div>
+          <div class="step anim">
+            <div class="step-circle">2. Generovanie</div>
+            <p>Nechaj UI navrhnúť a napísať</p>
+          </div>
+          <div class="step anim">
+            <div class="step-circle">3. Úpravy</div>
+            <p>Spusti, skús, oprav pokynom — opakuj</p>
+          </div>
+        </div>
+        <p class="small text-red" style="text-align:center;margin-top:0.5rem;">zámer → generovanie → cyklus spätnej väzby</p>
+      </div>
+    </section>
+
+    <!-- S14 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="corner-br corner-red" style="opacity:0.9;bottom:-20%;right:-8%;"></div>
+      <div class="corner-br" style="width:28vw;height:28vw;bottom:-10%;right:18%;opacity:0.55;background:#fff;"></div>
+      <div class="content">
+        <div class="quote-block">
+          <blockquote class="anim">
+            „UI je ako geniálny, trochu spoločensky neohrabaný pomocník: vie veľa, ale často nevie, čo z toho je pre teba naozaj dobré. Ty zadávaš smer a overuješ výsledok.“
+          </blockquote>
+          <p class="quote-attr anim">Mini-metafora na vibe coding</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S20 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Nástroje</h1></div>
+      </div>
+    </section>
+
+    <!-- S21 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Čo je LLM<span class="note-asterisk">*</span></h2>
+        <div class="frame anim">
+          <span class="pill">Základ</span>
+          <ul class="clean body">
+            <li>Model trénovaný na texte (a kóde) — predpovedá pokračovanie</li>
+            <li>Vie písať kód, vysvetľovať, upravovať — ale <strong>nie každý UI nástroj</strong> sa hodí na vibe coding</li>
+            <li>Generátory obrázkov, chatboty bez kódu alebo nástroje len na zhrnutie textu ≠ nástroje na písanie aplikácií</li>
+          </ul>
+        </div>
+        <div class="legend">
+          <p><strong>LLM*</strong> — Large Language Model (veľký jazykový model). Softvér, ktorý sa učí z obrovského množstva textu a vie generovať odpovede a kód.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S22 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Nie každá UI = vibe coding</h2>
+        <div class="split">
+          <div class="box anim">
+            <h3>Vhodné</h3>
+            <ul class="clean">
+              <li>generujú / upravujú súbory kódu</li>
+              <li>umožnia náhľad alebo spustenie</li>
+              <li>dajú sa opakovať v cykle úprav</li>
+            </ul>
+          </div>
+          <div class="box anim">
+            <h3>Menej vhodné</h3>
+            <ul class="clean">
+              <li>čisto vizuálne UI nástroje</li>
+              <li>odpovede bez upraviteľného kódu</li>
+              <li>nástroje bez kontextu projektu</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S23 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="corner-tl corner-red" style="width:22vw;height:22vw;top:-8%;left:-6%;"></div>
+      <div class="content" style="padding-left:6vw; max-width:88%;">
+        <div class="two-col">
+          <div>
+            <h2 class="title-l text-red anim">Jednoduché veci: priamo v chate</h2>
+            <p class="body anim" style="margin:1rem 0;">ChatGPT, Claude (web), Gemini</p>
+            <ul class="clean body anim">
+              <li><strong>Kedy áno:</strong> jednostránková utilita, kalkulačka, malý skript, HTML náhľad v chate</li>
+              <li><strong>Limit:</strong> kopírovanie súborov, ťažké udržanie väčšieho projektu, opakované sťahovanie archívov</li>
+            </ul>
+          </div>
+          <div class="visual-circle anim">Chat → kód → náhľad</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S24 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Chat vs agent</h2>
+        <p class="body anim" style="margin:1.5vh 0 2.5vh; max-width:92%;">
+          ChatGPT je UI, s ktorou sa <strong>rozprávaš</strong> o probléme.
+          Codex (a podobné) je UI, ktorú <strong>poveríš</strong>, aby ten problém v kóde reálne vyriešila.
+        </p>
+        <div class="split">
+          <div class="box box-round anim">
+            <h3>Konverzačná UI</h3>
+            <p class="small" style="margin-bottom:1.6vh; opacity:0.9;">ChatGPT · Claude chat · Gemini</p>
+            <ul class="clean">
+              <li>vysvetlí príčiny, navrhne opravu, napíše kód do chatu</li>
+              <li>ty kopíruješ, vkladáš, sťahuješ</li>
+              <li>stále primárne <strong>rozhovor</strong></li>
+            </ul>
+          </div>
+          <div class="box box-round anim">
+            <h3>UI agent<span class="note-asterisk">*</span></h3>
+            <p class="small" style="margin-bottom:1.6vh; opacity:0.9;">Codex · Claude Code · Cursor agent</p>
+            <ul class="clean">
+              <li>prejde projekt, upraví súbory, spustí testy</li>
+              <li>pracuje priamo v tvojom priečinku</li>
+              <li>cieľ: <strong>vykonať prácu</strong>, nie len odpovedať</li>
+            </ul>
+          </div>
+        </div>
+        <div class="legend" style="border-top-color:rgba(255,255,255,0.25);">
+          <p><strong>UI agent*</strong> — umelá inteligencia nastavená tak, aby v projekte sama robila kroky (čítať súbory, meniť kód, spúšťať príkazy), nielen písať odpoveď do chatu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S25 spektrum -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Spektrum nástrojov</h2>
+        <div class="spectrum">
+          <div class="axis-labels anim">
+            <span>← Viac „čistá UI“</span>
+            <span>Viac „klasický editor“ →</span>
+          </div>
+          <div class="spectrum-track">
+            <div class="spectrum-point anim">
+              <h3>ChatGPT · Claude · Gemini</h3>
+              <p>Rozhovor v prehliadači. Skvelé na malé veci a náhľad.</p>
+            </div>
+            <div class="spectrum-point anim">
+              <h3>Claude Code · Codex</h3>
+              <p>UI zameraná na prácu so súbormi projektu.</p>
+            </div>
+            <div class="spectrum-point highlight anim">
+              <h3>Cursor</h3>
+              <p>Editor ako VS Code + UI hneď po inštalácii, plynulo zabudovaná.</p>
+            </div>
+            <div class="spectrum-point anim">
+              <h3>Visual Studio Code</h3>
+              <p>Plnohodnotné IDE<span class="note-asterisk">*</span>. UI nie je natívne jadro (ide cez doplnky).</p>
+            </div>
+          </div>
+        </div>
+        <div class="legend">
+          <p><strong>IDE*</strong> — Integrated Development Environment (integrované vývojové prostredie). Editor kódu s nástrojmi na spúšťanie, ladenie a správu projektu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S26 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Bežný vývojár vs vibe coding</h2>
+        <div class="frame anim">
+          <span class="pill">Most</span>
+          <ul class="clean body">
+            <li><strong>Vývojár:</strong> IDE (napr. VS Code), Git<span class="note-asterisk">*</span>, ladenie, testy…</li>
+            <li><strong>Vibe cesta:</strong> Cursor (alebo podobný asistent) — stále „ako editor“, ale UI je hlavný spôsob písania zmien</li>
+            <li><strong>Zhrnutie:</strong> Cursor = most medzi „len chat“ a „plné vývojové prostredie“</li>
+          </ul>
+        </div>
+        <div class="legend">
+          <p><strong>Git*</strong> — systém na sledovanie zmien v súboroch; umožňuje vrátiť sa späť a spolupracovať na kóde.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S30 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Malá appka: dátumy</h1></div>
+      </div>
+    </section>
+
+    <!-- S31 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Zadanie</h2>
+        <div class="frame anim">
+          <span class="pill">Požiadavky</span>
+          <ul class="clean body">
+            <li>vypočítať, koľko času zostáva do konkrétneho dátumu</li>
+            <li>vypočítať rozdiel medzi dvoma dátumami (aj s časmi)</li>
+            <li>jednoduché rozhranie, funguje v prehliadači</li>
+          </ul>
+          <p class="small muted" style="margin-top:0.5rem;">Živá ukážka: náhľad v ChatGPT + Chrome rozšírenie z Cursora</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S32 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn pre ChatGPT</h2>
+          <a class="demo-btn" href="file:///C:/Users/J-Cup/Desktop/EXPERIMENTY/vibe-coding/datumova-appka/webka/index.html" target="_blank" rel="noopener">
+            Živá ukážka výsledku
+          </a>
+        </div>
+        <div class="prompt-box anim">
+          <pre>Chcem jednoduchú webovú appku na prácu s dátumami a časmi. Urob ju ako JEDEN súbor HTML (CSS + JS vnútri), ktorý pôjde spustiť priamo v prehliadači. Na konci mi ukáž aj preview / canvas, ak vieš.
+
+ČO MUSÍ VEDIEŤ:
+1) Countdown / „koľko zostáva“
+   - zadám cieľový dátum a čas
+   - appka ukáže, koľko zostáva: dni, hodiny, minúty, sekundy
+   - výsledok sa aktualizuje každú sekundu
+   - ak cieľ už prešiel, ukáž jasne „Termín už uplynul“ + ako dávno (nie záporné mätúce čísla)
+
+2) Rozdiel medzi dvoma dátumami
+   - dve polia: Od (dátum + čas) a Do (dátum + čas)
+   - vypočítaj absolútny rozdiel: dni, hodiny, minúty, sekundy
+   - ukáž aj celkový súčet v hodinách a v dňoch (desatinné, 2 desatinné miesta)
+   - tlačidlo „Vymeniť Od ↔ Do“
+
+JAZYK A UI:
+- celá appka v slovenčine
+- čistý, prehľadný layout; mobil aj desktop
+- dva jasne oddelené režimy / karty: „Do termínu“ a „Rozdiel dátumov“
+- predvyplň rozumné defaulty (napr. cieľ = o týždeň o 12:00; Od = teraz, Do = o 3 dni)
+- validácia: chýbajúci dátum, neplatný vstup — zrozumiteľná chybová hláška
+- žiadne externé knižnice, žiadny backend, žiadne API kľúče
+
+TECHNICKY:
+- jeden súbor index.html
+- nativní datetime-local inputy
+- výpočty v lokálnom čase prehliadača (nie UTC zmätok pre používateľa)
+- krátky komentár hore v HTML, čo appka robí
+
+NA KONCI ODPOVEDI:
+1) celý kód v jednom bloku
+2) krátky návod: ako to uložiť a otvoriť
+3) ak vieš, spusti / ukáž preview priamo v chate
+
+NEPRIDÁVAJ: login, databázu, dark mode toggle navyše, animácie navyše, marketing texty.</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- S33 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn pre Cursor</h2>
+          <span class="demo-badge">Ukážka cez rozšírenia</span>
+        </div>
+        <div class="prompt-box anim">
+          <pre><span class="prompt-bold">Vytvor Chrome extension (Manifest V3) — jednoduchú utilitu na dátumy a časy. Všetky súbory vytvor priamo v tomto projekte, pripravené na načítanie cez chrome://extensions (Load unpacked).</span>
+
+<span class="prompt-bold">CIEĽ PRODUKTU:
+Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
+
+<span class="prompt-half">FUNKCIE:
+1) Režim „Do termínu“
+   - datetime-local: cieľový dátum + čas
+   - live countdown: dni, hodiny, minúty, sekundy (update každú 1 s)
+   - ak termín prešiel: „Termín už uplynul“ + ako dávno
+   - zapamätaj posledný cieľový dátum v chrome.storage.local
+
+2) Režim „Rozdiel dátumov“
+   - Od + Do (dátum + čas)
+   - rozdiel: dni, hodiny, minúty, sekundy
+   - navyše: celkovo hodín a dní (2 desatinné miesta)
+   - tlačidlo Vymeniť Od ↔ Do
+   - tlačidlo Skopírovať výsledok do schránky</span>
+
+<span class="prompt-bold">SÚBORY (minimálne):
+- manifest.json (MV3, názov napr. „Dátumová kalkulačka“, action.default_popup, ikony)
+- popup.html
+- popup.css
+- popup.js
+- icons/ (vygeneruj jednoduché SVG alebo PNG 16/32/48/128 — aj placeholder je OK, ale cesty v manifeste musia sedieť)
+- README.md s návodom: ako nainštalovať Load unpacked + krátky popis funkcií</span>
+
+<span class="prompt-half">UI:
+- popup šírka ~360px, čitateľné, 2 taby/sekcie
+- žiadne externé CDN, žiadne build tool (čisté HTML/CSS/JS)
+- predvyplnené defaulty; validácia vstupov po slovensky</span>
+
+<span class="prompt-half">KVALITA:
+- čistý kód, žiadny mŕtvy kód
+- permissions len čo treba (storage); nežiadať host permissions ani tabs ak netreba
+- po dokončení vypíš zoznam vytvorených súborov a 3 kroky inštalácie</span>
+
+<span class="prompt-half">NESMIEŠ:
+- React/Vite/npm setup
+- analytics, login, sync na server
+- zbytočné features mimo zadania</span>
+
+<span class="prompt-bold">Začni vytvorením štruktúry súborov a hotovej funkčnej verzie, ktorú viem hneď načítať v Chrome.</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- S34 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Porovnanie</h2>
+        <div class="split">
+          <div class="box anim">
+            <h3>ChatGPT</h3>
+            <ul class="clean">
+              <li>rýchly štart</li>
+              <li>náhľad v chate</li>
+              <li>slabšia správa viacerých súborov</li>
+            </ul>
+          </div>
+          <div class="box anim">
+            <h3>Cursor</h3>
+            <ul class="clean">
+              <li>trochu viac prípravy</li>
+              <li>súbory hneď v projekte</li>
+              <li>praktickejšie na rozšírenie a ďalší vývoj</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S40 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Nakódiť sa dá všeličo</h1></div>
+      </div>
+    </section>
+
+    <!-- S41 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="corner-tl corner-red" style="width:18vw;height:18vw;top:-10%;left:-6%;"></div>
+      <div class="content" style="padding-left:3vw;">
+        <div class="two-col" style="align-items:center;">
+          <div>
+            <h2 class="title-l text-red anim">Predloha z Canva</h2>
+            <ul class="clean body anim" style="margin-top:2.5vh;">
+              <li>Z Canvy sme vyexportovali obrázky šablóny ako <strong>PNG</strong> súbory</li>
+              <li>Tie sme dali na analýzu <strong>UI</strong></li>
+              <li>UI z nich vytvorila súbor <strong>JSON</strong> — farby, tvary, fonty a pravidlá dizajnu</li>
+              <li>Túto špecifikáciu dizajnu potom UI použila pri tvorbe tejto prezentácie</li>
+            </ul>
+            <blockquote class="canva-quote anim">
+              <p>„Vibe nakódiť sa dá čokoľvek“</p>
+              <cite>ja</cite>
+            </blockquote>
+          </div>
+          <div class="canva-stack anim" aria-hidden="true">
+            <div class="shot shot-1"><img src="./prezentacia-template/002.png" alt="" /></div>
+            <div class="shot shot-2"><img src="./prezentacia-template/007.png" alt="" /></div>
+            <div class="shot shot-3"><img src="./prezentacia-template/005.png" alt="" /></div>
+            <div class="shot shot-4"><img src="./prezentacia-template/015.png" alt="" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S50 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Nákupka</h1></div>
+      </div>
+    </section>
+
+    <!-- S51 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <div class="two-col">
+          <div>
+            <h2 class="title-l text-red anim">Čo to je</h2>
+            <ul class="clean body anim" style="margin-top:1rem;">
+              <li>zdieľaný nákupný zoznam pre domácnosť</li>
+              <li>funguje ako webová stránka</li>
+              <li>dá sa nainštalovať z Chrome ako mobilná aplikácia (PWA<span class="note-asterisk">*</span>)</li>
+              <li>prihlásenie cez Google, živá synchronizácia, „niekto nakupuje“, pozvánky e-mailom, upozornenia</li>
+            </ul>
+          </div>
+          <div class="visual-circle anim" style="font-size:5.5vh;">Nákupka</div>
+        </div>
+        <div class="legend">
+          <p><strong>PWA*</strong> — Progressive Web App (progresívna webová aplikácia). Webová stránka, ktorú si vieš nainštalovať do telefónu a používať podobne ako bežnú appku.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S51b — P001 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Prvý pokyn (P001)</h2>
+          <span class="demo-badge">Cieľ + architektúra</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>Chcel by som vytvoriť aplikáciu na sledovanie a zdieľanie nákupného zoznamu medzi členmi mojej rodiny. Nie som vývojár, ale chcem túto aplikáciu vibe-codovať. Aplikácia má fungovať predovšetkým na telefónoch s Androidom, ale má byť dostupná aj ako webová stránka. Nechcem vyvíjať dve rôzne aplikácie, takže potrebujem tvoju radu, ktoré technológie použiť. Potrebujem to aj niekde nasadiť na „internet“ zadarmo, takže mi daj aj možnosti na to. Najdôležitejšie: keďže nie som programátor, prosím analyzuj túto požiadavku, ako keby si bol malý tím IT profesionálov alebo full-stack vývojár, a priprav optimálnu architektúru — nekóduj to hneď ako jeden veľký balík kódu — aplikuj best practices, ale snaž sa to udržať aj jednoduché. Toto je len MVP.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo UI navrhla</h3>
+            <ul class="clean">
+              <li><strong>Jedna appka</strong> — web, ktorý si vieš dať aj do telefónu<span class="tech">React + Vite · PWA</span></li>
+              <li><strong>Prihlásenie</strong> — cez Google účet, bez nových hesiel<span class="tech">Firebase Auth</span></li>
+              <li><strong>Spoločné dáta</strong> — zoznam sa všetkým aktualizuje hneď<span class="tech">Cloud Firestore</span></li>
+              <li><strong>Na internete zadarmo</strong> — cez Firebase Hosting<span class="tech">Firebase Hosting</span></li>
+              <li><strong>Upozornenia</strong> — keď niekto pridá položku alebo nakupuje<span class="tech">Web Notifications / FCM</span></li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Jednoducho:</strong> otvoríš stránku (alebo appku v telefóne) → prihlásiš sa Google → rodina zdieľa jeden živý zoznam v cloude.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S52 — P003: prvý kód / frontend -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn P003</h2>
+          <span class="demo-badge">1 · Prvý kód</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>Poďme teraz vytvoriť samotnú aplikáciu. S ohľadom na doterajšie informácie, ktoré máš, mi navrhni aplikáciu tak, aby fungovala prioritne na mobilných zariadeniach - responzívny dizajn - ale aby dobre vyzerala aj ako webová stránka. Keď budeš mať kód pripravený, uveď mi kroky ako aplikáciu otestovať na mojom počítači, kde ju momentálne vyvíjame a následne aj na mobilnom telefóne.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo sa stalo</h3>
+            <ul class="clean">
+              <li><strong>Vznikla appka</strong> — obrazovky, zoznam, domácnosť<span class="tech">React + Vite · PWA</span></li>
+              <li><strong>Najprv demo</strong> — funguje aj bez cloudu, hneď si ju vyskúšaš<span class="tech">localStorage</span></li>
+              <li><strong>Test na PC</strong> — spustíš ju lokálne v prehliadači<span class="tech">npm run dev</span></li>
+              <li><strong>Test na mobile</strong> — rovnaká Wi‑Fi, adresa z počítača</li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Etapa:</strong> z nápadu vznikne niečo, čo už vidíš a klikaš — ešte nie „ostrá“ prevádzka, ale reálne rozhranie.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S53 — P005: UX podľa používania -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn P005</h2>
+          <span class="demo-badge">2 · Rozhranie</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>Aplikáciu som otestoval na PC… Prišiel som na nedostatky: 1) chýba množstvo (ks / kg). 2) chcem vidieť, kto a kedy pridal položku. 3) záložka História — pridané aj odobrané. 4) možnosť upraviť položku. 5) na mobile tlačidlo Pridať vytŕčalo. 6) na mobile spodná navigácia ako v mobilnej appke; na PC môže vyzerať ako web.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo sa stalo</h3>
+            <ul class="clean">
+              <li><strong>Množstvo</strong> — kusy alebo kilogramy</li>
+              <li><strong>Stopa zmien</strong> — kto pridal, kedy, história</li>
+              <li><strong>Úpravy</strong> — názov aj množstvo sa dajú zmeniť</li>
+              <li><strong>Mobilný pocit</strong> — spodné menu, pohodlné ovládanie</li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Etapa:</strong> po prvom vyskúšaní prichádzajú konkrétne požiadavky „z života“ — UI ich dopíše do appky.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S54 — P011: Firebase / auth + databáza -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn P011</h2>
+          <span class="demo-badge">3 · Backend</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>OK, teraz už všetko vyzerá v poriadku po dizajnovej a vzhľadovej stránke. Teraz potrebujem aby už aplikácia fungovala naozaj a nielen v demo režime. Potrebujeme ju prepojiť s tými google službami, ktoré si na začiatku zadefinoval.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo sa stalo</h3>
+            <ul class="clean">
+              <li><strong>Koniec dema</strong> — appka ide „naostro“ do cloudu</li>
+              <li><strong>Prihlásenie</strong> — cez Google účet<span class="tech">Firebase Auth</span></li>
+              <li><strong>Spoločné dáta</strong> — zoznam žije v cloude<span class="tech">Cloud Firestore</span></li>
+              <li><strong>Pravidlá</strong> — kto čo smie čítať a zapisovať<span class="tech">Firestore rules</span></li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Etapa:</strong> z lokálnej hračky sa stáva skutočná appka, ktorú môžu používať viacerí ľudia naraz.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S55 — P016: pozvánky / domácnosť -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn P016</h2>
+          <span class="demo-badge">4 · Spolupráca</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>OK, potrebujeme opraviť rozoznávanie profilu po prihlásení. Aplikácia by si mala pamätať prihláseného používateľa… ak už patrí do domácnosti, načítaj ju automaticky. 2) Pozvánky: zakladateľ vloží Google e-mail člena; ten potvrdí alebo odmietne. Bez unikátneho kódu — len cez pozvanie.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo sa stalo</h3>
+            <ul class="clean">
+              <li><strong>Automatický návrat</strong> — otvoríš appku a si hneď „doma“</li>
+              <li><strong>Pozvánky e-mailom</strong> — pozveš člena Google účtom</li>
+              <li><strong>Potvrdiť / odmietnuť</strong> — člen rozhodne sám</li>
+              <li><strong>Bez kódov</strong> — jednoduchší, bezpečnejší vstup</li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Etapa:</strong> appka prestáva byť „pre jedného“ — stáva sa nástrojom pre celú domácnosť.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S55b — P018: nasadenie -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Pokyn P018</h2>
+          <span class="demo-badge">5 · Nasadenie</span>
+        </div>
+        <div class="p001-layout">
+          <div class="prompt-box anim">
+            <pre>Poďme nasadiť aplikáciu na firebase hosting, aby sme mali jednotnú URLku a mohli testovať notifikácie. Nastav čo treba nastaviť a veď ma prosím krokmi, čo mám urobiť, nahrať, skopírovať a podobne.</pre>
+          </div>
+          <div class="stack-panel anim">
+            <h3>Čo sa stalo</h3>
+            <ul class="clean">
+              <li><strong>Jedna adresa</strong> — appka je na internete<span class="tech">Firebase Hosting</span></li>
+              <li><strong>HTTPS</strong> — potrebné pre spoľahlivé prihlásenie a upozornenia</li>
+              <li><strong>Kroky za tebou</strong> — UI ťa vedie: login CLI → build → deploy</li>
+              <li><strong>PWA vonku</strong> — dá sa otvoriť aj nainštalovať z telefónu</li>
+            </ul>
+            <p class="stack-flow">
+              <strong>Etapa:</strong> už to nie je len na tvojom PC — rodina otvorí jednu URL a môže nakupovať spolu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S56 -->
+    <section class="slide bg-red" data-slide style="padding:0;">
+      <div class="stat-split" style="width:100%;">
+        <div class="stat-left anim">
+          <div class="stat-huge">~4 h</div>
+          <p class="subtitle" style="margin-top:1rem;color:#fff;">čas kódenia</p>
+        </div>
+        <div class="stat-right anim">
+          <h2 class="title-m text-red">~20 pokynov</h2>
+          <p class="body" style="margin-top:1rem;">Od nápadu k nasadenej PWA.<br />Nie „bez námahy“ — ale úplne iné tempo než klasický projekt od nuly, keď nie si programátorka.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S56b — Výsledok -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <div class="prompt-header anim">
+          <h2 class="title-l text-red">Výsledok</h2>
+          <a class="demo-btn" href="https://zdielany-nakupny-zoznam.web.app/" target="_blank" rel="noopener">
+            Otvoriť Nákupku
+          </a>
+        </div>
+        <div class="result-gallery">
+          <figure class="result-card anim">
+            <div class="result-frame">
+              <img src="./screenshoty/web-neprihlaseny.png" alt="Nákupka — web pred prihlásením" />
+            </div>
+            <figcaption>Web · neprihlásený</figcaption>
+          </figure>
+          <figure class="result-card anim">
+            <div class="result-frame phone">
+              <img src="./screenshoty/mobil-prihlaseny.png" alt="Nákupka — mobil prihlásený" />
+            </div>
+            <figcaption>Mobil · prihlásený</figcaption>
+          </figure>
+          <figure class="result-card anim">
+            <div class="result-frame">
+              <img src="./screenshoty/web-prihlaseny.png" alt="Nákupka — web prihlásený" />
+            </div>
+            <figcaption>Web · prihlásený</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- S57 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Limity a čo by sme robili inak</h2>
+        <div class="split">
+          <div class="box anim">
+            <h3>Technické limity</h3>
+            <ul class="clean">
+              <li>plný push cez FCM<span class="note-asterisk">*</span> + Cloud Functions chce vyšší tarif</li>
+              <li>upozornenia vo Windows závisia od systému</li>
+            </ul>
+          </div>
+          <div class="box anim">
+            <h3>Čo treba chápať</h3>
+            <ul class="clean">
+              <li>pravidlá bezpečnosti aspoň v základe</li>
+              <li>čo je „zadarmo“ a čo už nie</li>
+            </ul>
+          </div>
+        </div>
+        <div class="legend">
+          <p><strong>FCM*</strong> — Firebase Cloud Messaging. Služba na push upozornenia do telefónu / prehliadača aj keď appka nie je otvorená.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S60 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Ako „vibe kódiť“ správne</h1></div>
+      </div>
+    </section>
+
+    <!-- S61 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Najprv cieľ, potom pokyn</h2>
+        <div class="frame anim">
+          <span class="pill">Kontrolný zoznam</span>
+          <ul class="checklist">
+            <li><span class="num">1</span>Kto to bude používať?</li>
+            <li><span class="num">2</span>Aký je hlavný úspešný scenár (1–3 situácie)?</li>
+            <li><span class="num">3</span>Čo je mimo rozsahu?</li>
+            <li><span class="num">4</span>Kde to pobeží (mobil, počítač, rozšírenie)?</li>
+            <li><span class="num">5</span>Ako spoznáš, že je to hotové?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- S62 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <div class="two-col">
+          <div>
+            <h2 class="title-l text-red anim">Kvalita ≠ „nejako to beží“</h2>
+            <ul class="clean body anim" style="margin-top:1rem;">
+              <li>chceš čitateľnú štruktúru, chybové a prázdne stavy</li>
+              <li>pýtaj sa na bezpečnosť (prihlásenie, pravidlá, tajomstvá mimo projektu)</li>
+              <li>malé kroky &gt; jeden mega-pokyn „urob všetko“</li>
+              <li>po každej zmene: spusti a over sám</li>
+            </ul>
+          </div>
+          <div class="visual-circle anim">Overuj.<br />Nielen generuj.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S63 -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content">
+        <h2 class="title-l text-red anim">Aby to bolo aj poriadne, nie len funkčné</h2>
+        <div class="avoid-grid">
+          <div class="avoid-card anim">
+            <span class="num">1</span>
+            <p>pomenuj technológie a limity (bezplatný tarif, PWA, slovenské rozhranie…)</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">2</span>
+            <p>daj príklad dát / náčrt očakávania</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">3</span>
+            <p>zakáž UI pridávať svojvoľne funkcie navyše</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">4</span>
+            <p>keď sa zasekneš: zúž problém, pridaj výpisy, vráť sa o krok</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S64 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Čomu sa vyhnúť</h2>
+        <div class="avoid-grid">
+          <div class="avoid-card anim">
+            <span class="num">1</span>
+            <p>slepé kopírovanie bez spustenia</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">2</span>
+            <p>ignorovanie chýb</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">3</span>
+            <p>5 nových funkcií v jednom pokyne</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">4</span>
+            <p>chýbajúca definícia „hotovo“</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S70 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Dobré, zlé<br />a škaredé</h1></div>
+      </div>
+    </section>
+
+    <!-- S72 -->
+    <section class="slide bg-blush gbu-slide" data-slide>
+      <div class="content">
+        <div class="gbu-split">
+          <div>
+            <h2 class="title-l text-red anim">Dobré</h2>
+            <ul class="gbu-points">
+              <li class="anim"><span class="check" aria-hidden="true"></span>z nápadu máš rýchlo niečo, čo funguje</li>
+              <li class="anim"><span class="check" aria-hidden="true"></span>zvládneš to aj bez programátorského zázemia</li>
+              <li class="anim"><span class="check" aria-hidden="true"></span>učís sa priamo na tom, čo staviaš</li>
+              <li class="anim"><span class="check" aria-hidden="true"></span>UI ti pomáha kódovať — kedykoľvek, hneď</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="gbu-visual anim">
+        <img src="./obrazky/good-removebg-preview.png" alt="The Good" />
+      </div>
+    </section>
+
+    <!-- S73 -->
+    <section class="slide bg-red gbu-slide" data-slide>
+      <div class="content">
+        <div class="gbu-split">
+          <div>
+            <h2 class="title-l anim">Zlé</h2>
+            <ul class="gbu-points">
+              <li class="anim"><span class="cross" aria-hidden="true"></span>falošný pocit, že tomu rozumieš — lebo to „funguje“</li>
+              <li class="anim"><span class="cross" aria-hidden="true"></span>krehká bezpečnosť a technický dlh*</span></li>
+              <li class="anim"><span class="cross" aria-hidden="true"></span>ťažké hľadanie chýb, keď nevieš, čo je pod kapotou</li>
+              <li class="anim"><span class="cross" aria-hidden="true"></span>závislosť od nástroja / modelu</li>
+            </ul>
+            <div class="legend">
+              <p><strong>Technický dlh*</strong> — rýchle riešenia, ktoré neskôr stoja čas na opravy, údržbu alebo prepracovanie.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gbu-visual anim">
+        <img src="./obrazky/bad-removebg-preview.png" alt="The Bad" />
+      </div>
+    </section>
+
+    <!-- S74 -->
+    <section class="slide bg-charcoal gbu-slide" data-slide>
+      <div class="content">
+        <div class="gbu-split">
+          <div>
+            <h2 class="title-l anim">Škaredé</h2>
+            <ul class="gbu-points">
+              <li class="anim"><span class="warn" aria-hidden="true"></span>pustíš to „von“ s heslami v kóde alebo bez ochrany dát</li>
+              <li class="anim"><span class="warn" aria-hidden="true"></span>uveríš UI, že je to OK — a neoveríš to</li>
+              <li class="anim"><span class="warn" aria-hidden="true"></span>stráviš hodiny v slepej uličke kvôli jednému zlému rozhodnutiu</li>
+              <li class="anim"><span class="warn" aria-hidden="true"></span>skopíruješ cudzí kód či knižnice bez kontroly</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="gbu-visual anim">
+        <img src="./obrazky/ugly-removebg-preview.png" alt="The Ugly" />
+      </div>
+    </section>
+
+    <!-- S75 -->
+    <section class="slide bg-red" data-slide style="padding:0;">
+      <div class="stat-split" style="width:100%;">
+        <div class="stat-left">
+          <div class="stat-huge anim">80/20</div>
+          <p class="subtitle anim" style="margin-top:1rem;color:#fff;">→ extrém 95/5</p>
+        </div>
+        <div class="stat-right">
+          <p class="body anim"><strong>Pravidlo 80/20:</strong> približne 80&nbsp;% výsledku získaš za 20&nbsp;% času — a naopak, zvyšných 20&nbsp;% často zoberie väčšinu práce.</p>
+          <p class="body anim" style="margin-top:1.4rem;"><strong>Pri vibe codingu</strong> to vie ísť až do extrému <strong>95/5</strong>: UI sa zasekne na drobnosti a neprogramátor strávi hodiny niečím, čo programátor opraví ručne za 30&nbsp;sekúnd.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S80 -->
+    <section class="slide bg-chapter" data-slide>
+      <div class="content chapter-wrap">
+        <div class="chapter-circle"><h1>Záver</h1></div>
+      </div>
+    </section>
+
+    <!-- S81 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Zhrnutie v 4 bodoch</h2>
+        <div class="avoid-grid">
+          <div class="avoid-card anim">
+            <span class="num">1</span>
+            <p>Ty zadáš zámer, UI píše kód — a ty to kontroluješ</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">2</span>
+            <p>Na drobnosť stačí konverzačné UI; na väčší projekt skôr UI agent</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">3</span>
+            <p>Nástroje sú spektrum — od chatu až po plný editor</p>
+          </div>
+          <div class="avoid-card anim">
+            <span class="num">4</span>
+            <p>Jasné zadanie, malé kroky, overenie — a nezasekni sa na drobnostiach</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S82 -->
+    <section class="slide bg-light" data-slide>
+      <div class="content">
+        <h2 class="title-l anim">Čo ďalej?</h2>
+        <div class="toc-grid toc-stack" style="margin-top:2rem;">
+          <div class="toc-item anim"><span class="num">1</span><div><h3>vyber si jeden malý problém z bežného života</h3></div></div>
+          <div class="toc-item anim"><span class="num">2</span><div><h3>napíš stručné zadanie (5 viet)</h3></div></div>
+          <div class="toc-item anim"><span class="num">3</span><div><h3>skús ChatGPT náhľad → potom projekt v Cursore</h3></div></div>
+          <div class="toc-item anim"><span class="num">4</span><div><h3>zverejni aspoň pre seba / rodinu / priateľov</h3></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S83 -->
+    <section class="slide bg-red" data-slide>
+      <div class="content center">
+        <h1 class="title-xl anim">Ďakujem</h1>
+        <p class="subtitle anim" style="margin-top:1.2rem;">Otázky?</p>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="nav" aria-label="Navigácia slajdov">
+    <span class="progress" id="progressLabel">1 / 1</span>
+    <button type="button" id="btnPrev" aria-label="Predchádzajúci slajd">←</button>
+    <button type="button" id="btnNext" aria-label="Ďalší slajd">→</button>
+  </nav>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide[data-slide]"));
+      const label = document.getElementById("progressLabel");
+      const bar = document.getElementById("progressBar");
+      const btnPrev = document.getElementById("btnPrev");
+      const btnNext = document.getElementById("btnNext");
+      let index = 0;
+      let dir = 1;
+
+      function show(i, direction) {
+        if (i < 0 || i >= slides.length) return;
+        dir = direction || 1;
+        slides.forEach((s, n) => {
+          const on = n === i;
+          s.classList.toggle("is-active", on);
+          s.classList.toggle("from-left", on && dir < 0);
+          if (!on) s.classList.remove("from-left");
+        });
+        index = i;
+        label.textContent = (index + 1) + " / " + slides.length;
+        bar.style.width = ((index + 1) / slides.length * 100) + "%";
+        btnPrev.disabled = index === 0;
+        btnNext.disabled = index === slides.length - 1;
+        try {
+          history.replaceState(null, "", "#" + (index + 1));
+        } catch (_) {}
+      }
+
+      function next() { show(index + 1, 1); }
+      function prev() { show(index - 1, -1); }
+
+      btnNext.addEventListener("click", next);
+      btnPrev.addEventListener("click", prev);
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          next();
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          prev();
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          show(0, -1);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          show(slides.length - 1, 1);
+        } else if (e.key.toLowerCase() === "f") {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.();
+          } else {
+            document.exitFullscreen?.();
+          }
+        }
+      });
+
+      let touchX = null;
+      window.addEventListener("touchstart", (e) => {
+        touchX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      window.addEventListener("touchend", (e) => {
+        if (touchX == null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) {
+          if (dx < 0) next();
+          else prev();
+        }
+        touchX = null;
+      }, { passive: true });
+
+      const hash = parseInt((location.hash || "").replace("#", ""), 10);
+      const start = Number.isFinite(hash) && hash >= 1 && hash <= slides.length ? hash - 1 : 0;
+      show(start, 1);
+
+      /* Striedanie fotiek na slajde prezentujúceho */
+      const cardSerious = document.querySelector(".card-serious");
+      const cardSmile = document.querySelector(".card-smile");
+      let smileUp = false;
+      function swapPhotos() {
+        smileUp = !smileUp;
+        if (!cardSerious || !cardSmile) return;
+        if (smileUp) {
+          cardSmile.classList.add("is-front");
+          cardSmile.classList.remove("is-back");
+          cardSerious.classList.add("is-back");
+          cardSerious.classList.remove("is-front");
+        } else {
+          cardSerious.classList.add("is-front");
+          cardSerious.classList.remove("is-back");
+          cardSmile.classList.add("is-back");
+          cardSmile.classList.remove("is-front");
+        }
+      }
+      setInterval(swapPhotos, 2800);
+    })();
+  </script>
+</body>
+</html>

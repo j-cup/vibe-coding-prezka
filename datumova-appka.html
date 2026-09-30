@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práca s dátumami a časmi</title>
+  <!-- Jednoduchá offline appka na odpočítavanie do termínu a výpočet rozdielu medzi dvoma dátumami. -->
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #17212b;
+      --muted: #64748b;
+      --border: #d7dde4;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --danger: #b42318;
+      --danger-bg: #fff1f0;
+      --success: #067647;
+      --success-bg: #ecfdf3;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 48px;
+    }
+
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+    .intro { margin: 0; color: var(--muted); }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: clamp(20px, 4vw, 30px);
+      box-shadow: var(--shadow);
+    }
+
+    .panel[hidden] { display: none; }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+      background: white;
+    }
+
+    input:focus {
+      outline: 3px solid rgba(37, 99, 235, .15);
+      border-color: var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button.action {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+
+    button.action:hover { background: var(--accent-hover); }
+
+    button.secondary {
+      background: #e9eef5;
+      color: var(--text);
+    }
+
+    button.secondary:hover { background: #dce4ee; }
+
+    .message {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 9px;
+      font-weight: 600;
+    }
+
+    .error { background: var(--danger-bg); color: var(--danger); }
+    .success { background: var(--success-bg); color: var(--success); }
+
+    .result {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .result h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+    }
+
+    .big-result {
+      font-size: clamp(1.7rem, 5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .expired { color: var(--danger); }
+
+    .units {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .unit {
+      background: #f7f9fb;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .unit strong {
+      display: block;
+      font-size: 1.45rem;
+    }
+
+    .unit span {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .totals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .total {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .total span {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .total strong { font-size: 1.4rem; }
+
+    @media (max-width: 650px) {
+      .container { width: min(100% - 20px, 980px); padding-top: 24px; }
+      .tabs, .fields, .totals { grid-template-columns: 1fr; }
+      .units { grid-template-columns: repeat(2, 1fr); }
+      .card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Práca s dátumami a časmi</h1>
+      <p class="intro">Jednoduché odpočítavanie do termínu a výpočet rozdielu medzi dvoma dátumami.</p>
+    </header>
+
+    <nav class="tabs" aria-label="Režim výpočtu">
+      <button class="tab active" type="button" data-tab="countdown">Do termínu</button>
+      <button class="tab" type="button" data-tab="difference">Rozdiel dátumov</button>
+    </nav>
+
+    <section id="countdown" class="panel card">
+      <div class="fields">
+        <div>
+          <label for="target">Cieľový dátum a čas</label>
+          <input id="target" type="datetime-local">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action" id="countdownBtn" type="button">Vypočítať</button>
+      </div>
+
+      <div id="countdownMessage" aria-live="polite"></div>
+
+      <div class="result" id="countdownResult" hidden>
+        <h2>Výsledok</h2>
+        <div class="big-result" id="countdownHeadline"></div>
+        <div class="units">
+          <div class="unit"><strong id="cdDays">0</strong><span>dní</span></div>
+          <div class="unit"><strong id="cdHours">0</strong><span>hodín</span></div>
+          <div class="unit"><strong id="cdMinutes">0</strong><span>minút</span></div>
+          <div class="unit"><strong id="cdSeconds">0</strong><span>sekúnd</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="difference" class="panel card" hidden>
+      <div class="fields">
+        <div>
+          <label for="from">Od</label>
+          <input id="from" type="datetime-local">
+        </div>
+        <div>
+          <label for="to">Do</label>
+          <input id="to" type="datetime-local">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action" id="differenceBtn" type="button">Vypočítať rozdiel</button>
+        <button class="action secondary" id="swapBtn" type="button">Vymeniť Od ↔ Do</button>
+      </div>
+
+      <div id="differenceMessage" aria-live="polite"></div>
+
+      <div class="result" id="differenceResult" hidden>
+        <h2>Výsledok</h2>
+        <div class="units">
+          <div class="unit"><strong id="diffDays">0</strong><span>dní</span></div>
+          <div class="unit"><strong id="diffHours">0</strong><span>hodín</span></div>
+          <div class="unit"><strong id="diffMinutes">0</strong><span>minút</span></div>
+          <div class="unit"><strong id="diffSeconds">0</strong><span>sekúnd</span></div>
+        </div>
+        <div class="totals" style="margin-top: 14px;">
+          <div class="total">
+            <span>Celkom hodín</span>
+            <strong id="totalHours">0,00</strong>
+          </div>
+          <div class="total">
+            <span>Celkom dní</span>
+            <strong id="totalDays">0,00</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    // datetime-local pracuje s lokálnym časom prehliadača.
+    function toLocalInputValue(date) {
+      return [
+        date.getFullYear(),
+        "-",
+        pad(date.getMonth() + 1),
+        "-",
+        pad(date.getDate()),
+        "T",
+        pad(date.getHours()),
+        ":",
+        pad(date.getMinutes())
+      ].join("");
+    }
+
+    function parseDateTimeLocal(input) {
+      if (!input || !input.value) return null;
+
+      // Rozparsujeme hodnoty explicitne ako lokálny čas.
+      const match = input.value.match(
+        /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/
+      );
+      if (!match) return null;
+
+      const [, y, m, d, h, min] = match;
+      const date = new Date(
+        Number(y), Number(m) - 1, Number(d), Number(h), Number(min), 0, 0
+      );
+
+      // Odmietni neplatné kombinácie, napr. neexistujúci dátum.
+      if (
+        date.getFullYear() !== Number(y) ||
+        date.getMonth() !== Number(m) - 1 ||
+        date.getDate() !== Number(d) ||
+        date.getHours() !== Number(h) ||
+        date.getMinutes() !== Number(min)
+      ) {
+        return null;
+      }
+
+      return date;
+    }
+
+    function setMessage(element, text, type = "error") {
+      element.className = "message " + type;
+      element.textContent = text;
+      element.hidden = !text;
+    }
+
+    function clearMessage(element) {
+      element.className = "";
+      element.textContent = "";
+      element.hidden = true;
+    }
+
+    function breakdown(milliseconds) {
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      return { days, hours, minutes, seconds, totalSeconds };
+    }
+
+    // Countdown
+    let countdownEnabled = true;
+
+    function calculateCountdown() {
+      const message = $("countdownMessage");
+      const result = $("countdownResult");
+      const target = parseDateTimeLocal($("target"));
+
+      if (!target) {
+        result.hidden = true;
+        setMessage(message, "Zadajte platný cieľový dátum a čas.");
+        countdownEnabled = false;
+        return;
+      }
+
+      countdownEnabled = true;
+      const diff = target.getTime() - Date.now();
+      const absolute = breakdown(Math.abs(diff));
+
+      $("cdDays").textContent = absolute.days;
+      $("cdHours").textContent = absolute.hours;
+      $("cdMinutes").textContent = absolute.minutes;
+      $("cdSeconds").textContent = absolute.seconds;
+
+      if (diff < 0) {
+        $("countdownHeadline").textContent = "Termín už uplynul";
+        $("countdownHeadline").classList.add("expired");
+        setMessage(
+          message,
+          `Od termínu uplynulo ${absolute.days} dní, ${absolute.hours} hodín, ${absolute.minutes} minút a ${absolute.seconds} sekúnd.`,
+          "error"
+        );
+      } else {
+        $("countdownHeadline").textContent = "Do termínu zostáva";
+        $("countdownHeadline").classList.remove("expired");
+        setMessage(message, "", "success");
+      }
+
+      result.hidden = false;
+    }
+
+    // Rozdiel dátumov
+    function calculateDifference() {
+      const message = $("differenceMessage");
+      const result = $("differenceResult");
+      const from = parseDateTimeLocal($("from"));
+      const to = parseDateTimeLocal($("to"));
+
+      if (!from || !to) {
+        result.hidden = true;
+        setMessage(message, "Vyplňte obe polia platným dátumom a časom.");
+        return;
+      }
+
+      const diff = Math.abs(to.getTime() - from.getTime());
+      const parts = breakdown(diff);
+
+      $("diffDays").textContent = parts.days;
+      $("diffHours").textContent = parts.hours;
+      $("diffMinutes").textContent = parts.minutes;
+      $("diffSeconds").textContent = parts.seconds;
+
+      $("totalHours").textContent = (diff / 3600000).toFixed(2).replace(".", ",");
+      $("totalDays").textContent = (diff / 86400000).toFixed(2).replace(".", ",");
+
+      setMessage(message, "Rozdiel je vypočítaný absolútne, takže poradie Od/Do nehrá pri výsledku úlohu.", "success");
+      result.hidden = false;
+    }
+
+    // Prepínanie kariet
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach((p) => p.hidden = true);
+
+        tab.classList.add("active");
+        $(tab.dataset.tab).hidden = false;
+
+        if (tab.dataset.tab === "countdown") {
+          calculateCountdown();
+        } else {
+          calculateDifference();
+        }
+      });
+    });
+
+    $("countdownBtn").addEventListener("click", calculateCountdown);
+    $("differenceBtn").addEventListener("click", calculateDifference);
+
+    $("swapBtn").addEventListener("click", () => {
+      const from = $("from").value;
+      $("from").value = $("to").value;
+      $("to").value = from;
+      calculateDifference();
+    });
+
+    $("target").addEventListener("input", calculateCountdown);
+    $("from").addEventListener("input", calculateDifference);
+    $("to").addEventListener("input", calculateDifference);
+
+    // Rozumné defaulty.
+    const now = new Date();
+    const target = new Date(now);
+    target.setDate(target.getDate() + 7);
+    target.setHours(12, 0, 0, 0);
+
+    const end = new Date(now);
+    end.setDate(end.getDate() + 3);
+
+    $("target").value = toLocalInputValue(target);
+    $("from").value = toLocalInputValue(now);
+    $("to").value = toLocalInputValue(end);
+
+    calculateCountdown();
+    calculateDifference();
+
+    // Countdown obnovuj každú sekundu.
+    setInterval(() => {
+      if (countdownEnabled) calculateCountdown();
+    }, 1000);
+  </script>
+</body>
+</html>

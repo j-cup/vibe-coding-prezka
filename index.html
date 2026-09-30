@@ -264,7 +264,7 @@
       display: grid;
       place-items: center;
       text-align: center;
-      padding: 8%;
+      padding: 4%;
       box-shadow: none;
       animation: pop 520ms ease both;
     }
@@ -1437,6 +1437,21 @@
       line-height: 1.3;
     }
 
+    .slide.event-bleed {
+      padding: 50px;
+      background: var(--brand);
+    }
+
+    .event-bleed-img {
+      position: absolute;
+      inset: 50px;
+      width: calc(100% - 100px);
+      height: calc(100% - 100px);
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
     /* navigácia */
     .nav {
       position: fixed;
@@ -1551,6 +1566,11 @@
       </div>
     </section>
 
+    <!-- S00a2 — ďalší event -->
+    <section class="slide event-bleed" data-slide>
+      <img class="event-bleed-img" src="./obrazky/dalsi-event.jpg" alt="Ďalší event" />
+    </section>
+
     <!-- S00b — prezentujúci -->
     <section class="slide bg-red" data-slide data-speaker>
       <img class="speaker-logo" src="./obrazky/skill-in-2.png" alt="skill-in" />
@@ -1624,7 +1644,7 @@
           <h2 class="title-m" style="margin-bottom:1rem;">Definícia</h2>
           <p class="body">
             <strong>Vibe coding</strong> = spôsob vývoja softvéru, pri ktorom popisuješ zámer a správanie produktu bežným jazykom
-            a umelá inteligencia<span class="note-asterisk">*</span> (UI) píše a upravuje kód.
+            a umelá inteligencia<span class="note-asterisk">*</span> (AI) píše a upravuje kód.
             Ťažisko práce sa posúva z písania syntaxe na <strong>zadávanie, overovanie a rozhodovanie</strong>.
           </p>
           <p class="small" style="margin-top:1rem;">
@@ -1633,7 +1653,7 @@
         </div>
       </div>
       <div class="legend" style="position:relative;z-index:2;margin:0 5.5vw 0;padding-bottom:0.5rem;border:none;color:#fff;">
-        <p><strong>*</strong> Umelá inteligencia — softvér, ktorý sa učí z veľkého množstva textu a vie odpovedať alebo tvoriť obsah (vrátane kódu).</p>
+        <p><strong>*</strong> AI (Artificial Intelligence) — softvér, ktorý sa učí z veľkého množstva textu a vie odpovedať alebo tvoriť obsah (vrátane kódu).</p>
       </div>
     </section>
 
@@ -1673,7 +1693,7 @@
           </div>
           <div class="step anim">
             <div class="step-circle">2. Generovanie</div>
-            <p>Nechaj UI navrhnúť a napísať</p>
+            <p>Nechaj AI navrhnúť a napísať</p>
           </div>
           <div class="step anim">
             <div class="step-circle">3. Úpravy</div>
@@ -1691,7 +1711,7 @@
       <div class="content">
         <div class="quote-block">
           <blockquote class="anim">
-            „UI je ako geniálny, trochu spoločensky neohrabaný pomocník: vie veľa, ale často nevie, čo z toho je pre teba naozaj dobré. Ty zadávaš smer a overuješ výsledok.“
+            „AI je ako geniálny, trochu spoločensky neohrabaný pomocník: vie veľa, ale často nevie, čo z toho je pre teba naozaj dobré. Ty zadávaš smer a overuješ výsledok.“
           </blockquote>
           <p class="quote-attr anim">Mini-metafora na vibe coding</p>
         </div>
@@ -1713,7 +1733,7 @@
           <span class="pill">Základ</span>
           <ul class="clean body">
             <li>Model trénovaný na texte (a kóde) — predpovedá pokračovanie</li>
-            <li>Vie písať kód, vysvetľovať, upravovať — ale <strong>nie každý UI nástroj</strong> sa hodí na vibe coding</li>
+            <li>Vie písať kód, vysvetľovať, upravovať — ale <strong>nie každý AI nástroj</strong> sa hodí na vibe coding</li>
             <li>Generátory obrázkov, chatboty bez kódu alebo nástroje len na zhrnutie textu ≠ nástroje na písanie aplikácií</li>
           </ul>
         </div>
@@ -1726,7 +1746,7 @@
     <!-- S22 -->
     <section class="slide bg-red" data-slide>
       <div class="content">
-        <h2 class="title-l anim">Nie každá UI = vibe coding</h2>
+        <h2 class="title-l anim">Nie každá AI = vibe coding</h2>
         <div class="split">
           <div class="box anim">
             <h3>Vhodné</h3>
@@ -1739,7 +1759,7 @@
           <div class="box anim">
             <h3>Menej vhodné</h3>
             <ul class="clean">
-              <li>čisto vizuálne UI nástroje</li>
+              <li>čisto vizuálne AI nástroje</li>
               <li>odpovede bez upraviteľného kódu</li>
               <li>nástroje bez kontextu projektu</li>
             </ul>
@@ -1771,12 +1791,12 @@
       <div class="content">
         <h2 class="title-l anim">Chat vs agent</h2>
         <p class="body anim" style="margin:1.5vh 0 2.5vh; max-width:92%;">
-          ChatGPT je UI, s ktorou sa <strong>rozprávaš</strong> o probléme.
-          Codex (a podobné) je UI, ktorú <strong>poveríš</strong>, aby ten problém v kóde reálne vyriešila.
+          ChatGPT je AI, s ktorou sa <strong>rozprávaš</strong> o probléme.
+          Codex (a podobné) je AI, ktorú <strong>poveríš</strong>, aby ten problém v kóde reálne vyriešila.
         </p>
         <div class="split">
           <div class="box box-round anim">
-            <h3>Konverzačná UI</h3>
+            <h3>Konverzačná AI</h3>
             <p class="small" style="margin-bottom:1.6vh; opacity:0.9;">ChatGPT · Claude chat · Gemini</p>
             <ul class="clean">
               <li>vysvetlí príčiny, navrhne opravu, napíše kód do chatu</li>
@@ -1785,7 +1805,7 @@
             </ul>
           </div>
           <div class="box box-round anim">
-            <h3>UI agent<span class="note-asterisk">*</span></h3>
+            <h3>AI agent<span class="note-asterisk">*</span></h3>
             <p class="small" style="margin-bottom:1.6vh; opacity:0.9;">Codex · Claude Code · Cursor agent</p>
             <ul class="clean">
               <li>prejde projekt, upraví súbory, spustí testy</li>
@@ -1795,7 +1815,7 @@
           </div>
         </div>
         <div class="legend" style="border-top-color:rgba(255,255,255,0.25);">
-          <p><strong>UI agent*</strong> — umelá inteligencia nastavená tak, aby v projekte sama robila kroky (čítať súbory, meniť kód, spúšťať príkazy), nielen písať odpoveď do chatu.</p>
+          <p><strong>AI agent*</strong> — AI (Artificial Intelligence) nastavená tak, aby v projekte sama robila kroky (čítať súbory, meniť kód, spúšťať príkazy), nielen písať odpoveď do chatu.</p>
         </div>
       </div>
     </section>
@@ -1806,7 +1826,7 @@
         <h2 class="title-l text-red anim">Spektrum nástrojov</h2>
         <div class="spectrum">
           <div class="axis-labels anim">
-            <span>← Viac „čistá UI“</span>
+            <span>← Viac „čistá AI“</span>
             <span>Viac „klasický editor“ →</span>
           </div>
           <div class="spectrum-track">
@@ -1816,15 +1836,15 @@
             </div>
             <div class="spectrum-point anim">
               <h3>Claude Code · Codex</h3>
-              <p>UI zameraná na prácu so súbormi projektu.</p>
+              <p>AI zameraná na prácu so súbormi projektu.</p>
             </div>
             <div class="spectrum-point highlight anim">
               <h3>Cursor</h3>
-              <p>Editor ako VS Code + UI hneď po inštalácii, plynulo zabudovaná.</p>
+              <p>Editor ako VS Code + AI hneď po inštalácii, plynulo zabudovaná.</p>
             </div>
             <div class="spectrum-point anim">
               <h3>Visual Studio Code</h3>
-              <p>Plnohodnotné IDE<span class="note-asterisk">*</span>. UI nie je natívne jadro (ide cez doplnky).</p>
+              <p>Plnohodnotné IDE<span class="note-asterisk">*</span>. AI nie je natívne jadro (ide cez doplnky).</p>
             </div>
           </div>
         </div>
@@ -1842,7 +1862,7 @@
           <span class="pill">Most</span>
           <ul class="clean body">
             <li><strong>Vývojár:</strong> IDE (napr. VS Code), Git<span class="note-asterisk">*</span>, ladenie, testy…</li>
-            <li><strong>Vibe cesta:</strong> Cursor (alebo podobný asistent) — stále „ako editor“, ale UI je hlavný spôsob písania zmien</li>
+            <li><strong>Vibe cesta:</strong> Cursor (alebo podobný asistent) — stále „ako editor“, ale AI je hlavný spôsob písania zmien</li>
             <li><strong>Zhrnutie:</strong> Cursor = most medzi „len chat“ a „plné vývojové prostredie“</li>
           </ul>
         </div>
@@ -2020,9 +2040,9 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
             <h2 class="title-l text-red anim">Predloha z Canva</h2>
             <ul class="clean body anim" style="margin-top:2.5vh;">
               <li>Z Canvy sme vyexportovali obrázky šablóny ako <strong>PNG</strong> súbory</li>
-              <li>Tie sme dali na analýzu <strong>UI</strong></li>
-              <li>UI z nich vytvorila súbor <strong>JSON</strong> — farby, tvary, fonty a pravidlá dizajnu</li>
-              <li>Túto špecifikáciu dizajnu potom UI použila pri tvorbe tejto prezentácie</li>
+              <li>Tie sme dali na analýzu <strong>AI</strong></li>
+              <li>AI z nich vytvorila súbor <strong>JSON</strong> — farby, tvary, fonty a pravidlá dizajnu</li>
+              <li>Túto špecifikáciu dizajnu potom AI použila pri tvorbe tejto prezentácie</li>
             </ul>
             <blockquote class="canva-quote anim">
               <p>„Vibe nakódiť sa dá čokoľvek“</p>
@@ -2079,7 +2099,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
             <pre>Chcel by som vytvoriť aplikáciu na sledovanie a zdieľanie nákupného zoznamu medzi členmi mojej rodiny. Nie som vývojár, ale chcem túto aplikáciu vibe-codovať. Aplikácia má fungovať predovšetkým na telefónoch s Androidom, ale má byť dostupná aj ako webová stránka. Nechcem vyvíjať dve rôzne aplikácie, takže potrebujem tvoju radu, ktoré technológie použiť. Potrebujem to aj niekde nasadiť na „internet“ zadarmo, takže mi daj aj možnosti na to. Najdôležitejšie: keďže nie som programátor, prosím analyzuj túto požiadavku, ako keby si bol malý tím IT profesionálov alebo full-stack vývojár, a priprav optimálnu architektúru — nekóduj to hneď ako jeden veľký balík kódu — aplikuj best practices, ale snaž sa to udržať aj jednoduché. Toto je len MVP.</pre>
           </div>
           <div class="stack-panel anim">
-            <h3>Čo UI navrhla</h3>
+            <h3>Čo AI navrhla</h3>
             <ul class="clean">
               <li><strong>Jedna appka</strong> — web, ktorý si vieš dať aj do telefónu<span class="tech">React + Vite · PWA</span></li>
               <li><strong>Prihlásenie</strong> — cez Google účet, bez nových hesiel<span class="tech">Firebase Auth</span></li>
@@ -2142,7 +2162,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
               <li><strong>Mobilný pocit</strong> — spodné menu, pohodlné ovládanie</li>
             </ul>
             <p class="stack-flow">
-              <strong>Etapa:</strong> po prvom vyskúšaní prichádzajú konkrétne požiadavky „z života“ — UI ich dopíše do appky.
+              <strong>Etapa:</strong> po prvom vyskúšaní prichádzajú konkrétne požiadavky „z života“ — AI ich dopíše do appky.
             </p>
           </div>
         </div>
@@ -2219,7 +2239,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
             <ul class="clean">
               <li><strong>Jedna adresa</strong> — appka je na internete<span class="tech">Firebase Hosting</span></li>
               <li><strong>HTTPS</strong> — potrebné pre spoľahlivé prihlásenie a upozornenia</li>
-              <li><strong>Kroky za tebou</strong> — UI ťa vedie: login CLI → build → deploy</li>
+              <li><strong>Kroky za tebou</strong> — AI ťa vedie: login CLI → build → deploy</li>
               <li><strong>PWA vonku</strong> — dá sa otvoriť aj nainštalovať z telefónu</li>
             </ul>
             <p class="stack-flow">
@@ -2359,7 +2379,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
           </div>
           <div class="avoid-card anim">
             <span class="num">3</span>
-            <p>zakáž UI pridávať svojvoľne funkcie navyše</p>
+            <p>zakáž AI pridávať svojvoľne funkcie navyše</p>
           </div>
           <div class="avoid-card anim">
             <span class="num">4</span>
@@ -2411,7 +2431,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
               <li class="anim"><span class="check" aria-hidden="true"></span>z nápadu máš rýchlo niečo, čo funguje</li>
               <li class="anim"><span class="check" aria-hidden="true"></span>zvládneš to aj bez programátorského zázemia</li>
               <li class="anim"><span class="check" aria-hidden="true"></span>učís sa priamo na tom, čo staviaš</li>
-              <li class="anim"><span class="check" aria-hidden="true"></span>UI ti pomáha kódovať — kedykoľvek, hneď</li>
+              <li class="anim"><span class="check" aria-hidden="true"></span>AI ti pomáha kódovať — kedykoľvek, hneď</li>
             </ul>
           </div>
         </div>
@@ -2452,7 +2472,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
             <h2 class="title-l anim">Škaredé</h2>
             <ul class="gbu-points">
               <li class="anim"><span class="warn" aria-hidden="true"></span>pustíš to „von“ s heslami v kóde alebo bez ochrany dát</li>
-              <li class="anim"><span class="warn" aria-hidden="true"></span>uveríš UI, že je to OK — a neoveríš to</li>
+              <li class="anim"><span class="warn" aria-hidden="true"></span>uveríš AI, že je to OK — a neoveríš to</li>
               <li class="anim"><span class="warn" aria-hidden="true"></span>stráviš hodiny v slepej uličke kvôli jednému zlému rozhodnutiu</li>
               <li class="anim"><span class="warn" aria-hidden="true"></span>skopíruješ cudzí kód či knižnice bez kontroly</li>
             </ul>
@@ -2473,7 +2493,7 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
         </div>
         <div class="stat-right">
           <p class="body anim"><strong>Pravidlo 80/20:</strong> približne 80&nbsp;% výsledku získaš za 20&nbsp;% času — a naopak, zvyšných 20&nbsp;% často zoberie väčšinu práce.</p>
-          <p class="body anim" style="margin-top:1.4rem;"><strong>Pri vibe codingu</strong> to vie ísť až do extrému <strong>95/5</strong>: UI sa zasekne na drobnosti a neprogramátor strávi hodiny niečím, čo programátor opraví ručne za 30&nbsp;sekúnd.</p>
+          <p class="body anim" style="margin-top:1.4rem;"><strong>Pri vibe codingu</strong> to vie ísť až do extrému <strong>95/5</strong>: AI sa zasekne na drobnosti a neprogramátor strávi hodiny niečím, čo programátor opraví ručne za 30&nbsp;sekúnd.</p>
         </div>
       </div>
     </section>
@@ -2492,11 +2512,11 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
         <div class="avoid-grid">
           <div class="avoid-card anim">
             <span class="num">1</span>
-            <p>Ty zadáš zámer, UI píše kód — a ty to kontroluješ</p>
+            <p>Ty zadáš zámer, AI píše kód — a ty to kontroluješ</p>
           </div>
           <div class="avoid-card anim">
             <span class="num">2</span>
-            <p>Na drobnosť stačí konverzačné UI; na väčší projekt skôr UI agent</p>
+            <p>Na drobnosť stačí konverzačné AI; na väčší projekt skôr AI agent</p>
           </div>
           <div class="avoid-card anim">
             <span class="num">3</span>
@@ -2528,6 +2548,19 @@ Popup extension (ikona v toolbare), slovenská UI, bez backendu.</span>
       <div class="content center">
         <h1 class="title-xl anim">Ďakujem</h1>
         <p class="subtitle anim" style="margin-top:1.2rem;">Otázky?</p>
+      </div>
+    </section>
+
+    <!-- S84 — ďalší event (záver) -->
+    <section class="slide event-bleed" data-slide>
+      <img class="event-bleed-img" src="./obrazky/dalsi-event.jpg" alt="Ďalší event" />
+    </section>
+
+    <!-- S85 — prezenčka / spätná väzba -->
+    <section class="slide bg-blush" data-slide>
+      <div class="content center" style="gap:4vh;">
+        <h1 class="title-xl text-red anim">Prezenčka</h1>
+        <h1 class="title-xl text-red anim">Spätná väzba</h1>
       </div>
     </section>
 
